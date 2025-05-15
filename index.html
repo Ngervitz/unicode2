@@ -1,14 +1,4 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>Untitled</title>
-  <link rel="stylesheet" href="./style.css">
-
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -22,7 +12,6 @@
       max-width: 800px;
       margin: auto;
     }
-
     input, textarea, button {
       width: 100%;
       margin: 10px 0;
@@ -30,24 +19,20 @@
       font-size: 16px;
       box-sizing: border-box;
     }
-
     button {
       background-color: #007BFF;
       color: white;
       border: none;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #0056b3;
     }
-
     .highlight-char {
       background-color: yellow;
       color: red;
       font-weight: bold;
     }
-
     #output, #textoLimpio {
       white-space: pre-wrap;
       background: white;
@@ -55,7 +40,6 @@
       border: 1px solid #ccc;
       margin-top: 10px;
     }
-
     .hidden {
       display: none;
     }
@@ -69,25 +53,25 @@
   <textarea id="inputText" rows="8" placeholder="Pega aquí el texto..."></textarea>
 
   <button onclick="resaltarUnicode()">Mostrar caracteres ocultos</button>
-
   <div id="output" class="hidden"></div>
 
   <button onclick="limpiarTexto()">Limpiar texto</button>
-
   <div id="textoLimpio" class="hidden"></div>
 
   <div id="formulario" class="hidden">
-  <h3>Descargar texto limpio</h3>
-  <form action="https://formspree.io/f/xldbazop" method="POST">
-    <label for="nombre">Nombre:</label>
-    <input type="text" name="nombre" required>
+    <h3>Descargar texto limpio</h3>
+    <form id="formDatos" action="https://formspree.io/f/xldbazop" method="POST">
+      <label for="nombre">Nombre:</label>
+      <input type="text" name="nombre" id="nombre" required>
 
-    <label for="email">Email:</label>
-    <input type="email" name="email" required>
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" required>
 
-    <button type="submit">Enviar</button>
-  </form>
-</div>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <button id="botonCopiar" class="hidden" onclick="copiarTexto()">Copiar texto limpio</button>
 
   <script>
     const unicodeInvisibles = /[\u200B-\u200D\uFEFF\u2028\u2029\u0000-\u001F\u007F-\u009F]/g;
@@ -124,26 +108,39 @@
       document.getElementById('formulario').classList.remove('hidden');
     }
 
-    function enviarFormulario() {
-      const nombre = document.getElementById('nombre').value.trim();
-      const email = document.getElementById('email').value.trim();
+    document.getElementById('formDatos').addEventListener('submit', function(e) {
+      e.preventDefault();
 
-      if (!nombre || !email) {
-        alert('Completá tu nombre y email.');
-        return;
-      }
+      const form = e.target;
+      const data = new FormData(form);
 
+      fetch(form.action, {
+        method: form.method,
+        body: data,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          alert('Formulario enviado correctamente.');
+          form.reset();
+          document.getElementById('formulario').classList.add('hidden');
+          document.getElementById('botonCopiar').classList.remove('hidden');
+        } else {
+          alert('Error al enviar el formulario.');
+        }
+      }).catch(error => {
+        alert('Error de conexión al enviar el formulario.');
+      });
+    });
+
+    function copiarTexto() {
       const texto = document.getElementById('textoLimpio').textContent;
       navigator.clipboard.writeText(texto)
         .then(() => alert('Texto limpio copiado al portapapeles.'))
-        .catch(err => alert('No se pudo copiar el texto.'));
+        .catch(() => alert('No se pudo copiar el texto.'));
     }
   </script>
-
-</body>
-</html>
-<!-- partial -->
-  <script  src="./script.js"></script>
 
 </body>
 </html>
