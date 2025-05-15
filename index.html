@@ -51,6 +51,11 @@
 </head>
 <body oncontextmenu="return false;">
 
+  <!-- Logo centrado arriba -->
+  <div style="text-align: center; margin-bottom: 20px;">
+    <img src="unnamed.png" alt="Logo" style="max-width: 150px;">
+  </div>
+
   <h2>Limpiador de Texto generado por IA</h2>
 
   <label for="inputText">Pega tu texto aquí:</label>
@@ -135,7 +140,7 @@
 
           const limpioDiv = document.getElementById('textoLimpio');
           limpioDiv.classList.remove('bloqueado');
-          document.body.oncontextmenu = null; // Vuelve a habilitar botón derecho
+          document.body.oncontextmenu = null;
         } else {
           alert('Error al enviar el formulario.');
         }
