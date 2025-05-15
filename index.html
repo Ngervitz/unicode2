@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Limpiador de Texto IA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #000;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .highlight-char {
+      background-color: yellow;
+      color: red;
+      font-weight: bold;
+    }
+
+    #output, #textoLimpio {
+      white-space: pre-wrap;
+      background: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Limpiador de Texto generado por IA</h2>
+
+  <label for="inputText">Pega tu texto aquí:</label>
+  <textarea id="inputText" rows="8" placeholder="Pega aquí el texto..."></textarea>
+
+  <button onclick="resaltarUnicode()">Mostrar caracteres ocultos</button>
+
+  <div id="output" class="hidden"></div>
+
+  <button onclick="limpiarTexto()">Limpiar texto</button>
+
+  <div id="textoLimpio" class="hidden"></div>
+
+  <div id="formulario" class="hidden">
+    <h3>Descargar texto limpio</h3>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
+
+    <button onclick="enviarFormulario()">Copiar texto limpio</button>
+  </div>
+
+  <script>
+    const unicodeInvisibles = /[\u200B-\u200D\uFEFF\u2028\u2029\u0000-\u001F\u007F-\u009F]/g;
+
+    function resaltarUnicode() {
+      const texto = document.getElementById('inputText').value;
+      if (!texto) {
+        alert('Pegá un texto primero.');
+        return;
+      }
+
+      const resaltado = texto.replace(unicodeInvisibles, c => {
+        const hex = c.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0');
+        return `<span class="highlight-char">[U+${hex}]</span>`;
+      });
+
+      const output = document.getElementById('output');
+      output.innerHTML = '<h3>Caracteres ocultos detectados:</h3>' + resaltado;
+      output.classList.remove('hidden');
+    }
+
+    function limpiarTexto() {
+      const texto = document.getElementById('inputText').value;
+      if (!texto) {
+        alert('Pegá un texto primero.');
+        return;
+      }
+
+      const limpio = texto.replace(unicodeInvisibles, '');
+      const limpioDiv = document.getElementById('textoLimpio');
+      limpioDiv.textContent = limpio;
+      limpioDiv.classList.remove('hidden');
+
+      document.getElementById('formulario').classList.remove('hidden');
+    }
+
+    function enviarFormulario() {
+      const nombre = document.getElementById('nombre').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      if (!nombre || !email) {
+        alert('Completá tu nombre y email.');
+        return;
+      }
+
+      const texto = document.getElementById('textoLimpio').textContent;
+      navigator.clipboard.writeText(texto)
+        .then(() => alert('Texto limpio copiado al portapapeles.'))
+        .catch(err => alert('No se pudo copiar el texto.'));
+    }
+  </script>
+
+</body>
+</html>
+<!-- partial -->
+  <script  src="./script.js"></script>
+
+</body>
+</html>
