@@ -77,15 +77,17 @@
   <div id="textoLimpio" class="hidden"></div>
 
   <div id="formulario" class="hidden">
-    <h3>Descargar texto limpio</h3>
+  <h3>Descargar texto limpio</h3>
+  <form action="https://formspree.io/f/tu_id_formspree" method="POST">
     <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" required>
+    <input type="text" name="nombre" required>
 
     <label for="email">Email:</label>
-    <input type="email" id="email" required>
+    <input type="email" name="email" required>
 
-    <button onclick="enviarFormulario()">Copiar texto limpio</button>
-  </div>
+    <button type="submit">Enviar</button>
+  </form>
+</div>
 
   <script>
     const unicodeInvisibles = /[\u200B-\u200D\uFEFF\u2028\u2029\u0000-\u001F\u007F-\u009F]/g;
