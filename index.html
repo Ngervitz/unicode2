@@ -43,9 +43,13 @@
     .hidden {
       display: none;
     }
+    .bloqueado {
+      user-select: none;
+      pointer-events: none;
+    }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
   <h2>Limpiador de Texto generado por IA</h2>
 
@@ -56,10 +60,10 @@
   <div id="output" class="hidden"></div>
 
   <button onclick="limpiarTexto()">Limpiar texto</button>
-  <div id="textoLimpio" class="hidden"></div>
+  <div id="textoLimpio" class="hidden bloqueado"></div>
 
   <div id="formulario" class="hidden">
-    <h3>Descargar texto limpio</h3>
+    <h3>Completá tus datos para copiar el texto limpio</h3>
     <form id="formDatos" action="https://formspree.io/f/xldbazop" method="POST">
       <label for="nombre">Nombre:</label>
       <input type="text" name="nombre" id="nombre" required>
@@ -104,8 +108,10 @@
       const limpioDiv = document.getElementById('textoLimpio');
       limpioDiv.textContent = limpio;
       limpioDiv.classList.remove('hidden');
+      limpioDiv.classList.add('bloqueado');
 
       document.getElementById('formulario').classList.remove('hidden');
+      document.getElementById('botonCopiar').classList.add('hidden');
     }
 
     document.getElementById('formDatos').addEventListener('submit', function(e) {
@@ -126,6 +132,10 @@
           form.reset();
           document.getElementById('formulario').classList.add('hidden');
           document.getElementById('botonCopiar').classList.remove('hidden');
+
+          const limpioDiv = document.getElementById('textoLimpio');
+          limpioDiv.classList.remove('bloqueado');
+          document.body.oncontextmenu = null; // Vuelve a habilitar botón derecho
         } else {
           alert('Error al enviar el formulario.');
         }
@@ -135,7 +145,7 @@
     });
 
     function copiarTexto() {
-      const texto = document.getElementById('Completa los datos textoLimpio').textContent;
+      const texto = document.getElementById('textoLimpio').textContent;
       navigator.clipboard.writeText(texto)
         .then(() => alert('Texto limpio copiado al portapapeles.'))
         .catch(() => alert('No se pudo copiar el texto.'));
